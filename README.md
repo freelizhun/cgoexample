@@ -12,3 +12,6 @@ Hello C world: My name is tim, tim hughes.
 ```
 ### another-example可以参考：
 https://rosettacode.org/wiki/Call_a_function_in_a_shared_library#Go
+
+### another-example-2可以参考：
+https://karthikkaranth.me/blog/calling-c-code-from-go/

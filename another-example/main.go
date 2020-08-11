@@ -1,15 +1,9 @@
-package main
- 
-/*
-#cgo LDFLAGS: -ldl
- 
-#include <stdlib.h>
 #include <dlfcn.h>
+  
+typedef int (*someFunc) (const char *s,const char *b);
  
-typedef int (*someFunc) (const char *s);
- 
-int bridge_someFunc(someFunc f, const char *s) {
-    return f(s);
+int bridge_someFunc(someFunc f, const char *s, const char *b) {
+    return f(s,b);
 }
 */
 import "C"
@@ -21,32 +15,34 @@ import (
  
 var handle = -1
  
-func myOpenImage(s string) int {
-    fmt.Fprintf(os.Stderr, "internal openImage opens %s...\n", s)
+func myOpenImage(s string, b string) int {
+    fmt.Fprintf(os.Stderr, "tagged image %s:%s error...\n", s,b)
     handle++
     return handle
 }
  
 func main() {
-    libpath := C.CString("/usr/lib/openimage.so")
+    libpath := C.CString("/usr/lib/httc_register_container.so")
     defer C.free(unsafe.Pointer(libpath))
     imglib := C.dlopen(libpath, C.RTLD_LAZY)
     var imghandle int
     if imglib != nil {
-        openimage := C.CString("openimage")
-        defer C.free(unsafe.Pointer(openimage))
-        fp := C.dlsym(imglib, openimage)
+        httc_register_container := C.CString("httc_register_container")
+        defer C.free(unsafe.Pointer(httc_register_container))
+        fp := C.dlsym(imglib, httc_register_container)
         if fp != nil {
-            fi := C.CString("fake.img")
-            defer C.free(unsafe.Pointer(fi))
-            imghandle = int(C.bridge_someFunc(C.someFunc(fp), fi))
+            imageName := C.CString("busybox")
+            defer C.free(unsafe.Pointer(imageName))
+            imageVersion := C.CString("1.28.4")
+            defer C.free(unsafe.Pointer(imageVersion))
+            imghandle = int(C.bridge_someFunc(C.someFunc(fp), imageName, imageVersion))
  
         } else {
-            imghandle = myOpenImage("fake.img")
+            imghandle = myOpenImage("busybox","1.28.4")
         }
         C.dlclose(imglib)
     } else {
-        imghandle = myOpenImage("fake.img")
+        imghandle = myOpenImage("busybox","1.28.4")
     }
     fmt.Printf("opened with handle %d\n", imghandle)
 }

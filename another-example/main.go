@@ -1,5 +1,11 @@
+package main
+ 
+/*
+#cgo LDFLAGS: -ldl
+ 
+#include <stdlib.h>
 #include <dlfcn.h>
-  
+ 
 typedef int (*someFunc) (const char *s,const char *b);
  
 int bridge_someFunc(someFunc f, const char *s, const char *b) {
@@ -33,8 +39,8 @@ func main() {
         if fp != nil {
             imageName := C.CString("busybox")
             defer C.free(unsafe.Pointer(imageName))
-            imageVersion := C.CString("1.28.4")
-            defer C.free(unsafe.Pointer(imageVersion))
+	    imageVersion := C.CString("1.28.4")
+	    defer C.free(unsafe.Pointer(imageVersion))
             imghandle = int(C.bridge_someFunc(C.someFunc(fp), imageName, imageVersion))
  
         } else {

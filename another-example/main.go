@@ -22,20 +22,20 @@ import (
 var handle = -1
  
 func myOpenImage(s string, b string) int {
-    fmt.Fprintf(os.Stderr, "tagged image %s:%s error...\n", s,b)
+    fmt.Fprintf(os.Stderr, "fftfffagged ffffimasdgdsde %s:%s error...\n", s,b)
     handle++
     return handle
 }
  
 func main() {
-    libpath := C.CString("/usr/lib/httc_register_container.so")
+    libpath := C.CString("/usr/lib/openimage.so")
     defer C.free(unsafe.Pointer(libpath))
     imglib := C.dlopen(libpath, C.RTLD_LAZY)
     var imghandle int
     if imglib != nil {
-        httc_register_container := C.CString("httc_register_container")
-        defer C.free(unsafe.Pointer(httc_register_container))
-        fp := C.dlsym(imglib, httc_register_container)
+        openimage := C.CString("openimage")
+        defer C.free(unsafe.Pointer(openimage))
+        fp := C.dlsym(imglib, openimage)
         if fp != nil {
             imageName := C.CString("busybox")
             defer C.free(unsafe.Pointer(imageName))

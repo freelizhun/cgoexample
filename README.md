@@ -10,3 +10,5 @@ $ gcc hello.c -L. -lperson -o hello
 在当前目录./hello则输出成功：
 Hello C world: My name is tim, tim hughes.
 ```
+### another-example可以参考：
+https://rosettacode.org/wiki/Call_a_function_in_a_shared_library#Go
